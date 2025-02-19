@@ -1,7 +1,18 @@
-import React from "react";
+"use client";
+
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const page = () => {
-  return <div>page</div>;
+  return (
+    <>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </>
+  );
 };
 
 export default page;
