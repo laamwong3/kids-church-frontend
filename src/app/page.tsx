@@ -1,5 +1,7 @@
+import WelcomPage from "@/components/home/WelcomPage";
+
 const page = () => {
-  return <div>hello</div>;
+  return <WelcomPage />;
 };
 
 export default page;

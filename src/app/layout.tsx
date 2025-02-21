@@ -28,9 +28,9 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
         >
-          {children}
+          <main className="container mx-auto max-w-screen-sm">{children}</main>
         </body>
       </html>
     </AuthProvider>
