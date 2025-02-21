@@ -1,18 +1,5 @@
-"use client";
-
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-
 const page = () => {
-  return (
-    <>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-    </>
-  );
+  return <div>hello</div>;
 };
 
 export default page;
