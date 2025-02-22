@@ -26,7 +26,7 @@ const SignUpDrawer = () => {
         </DrawerHeader>
         <DrawerFooter>
           <Button>Submit</Button>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
