@@ -9,12 +9,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  generateChildQRData,
+  generateFamilyQRData,
+  generateQRCode,
+} from "@/lib/qr-utils";
 import { ArrowLeft, Download, Printer } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function QrCodesPage() {
   const [activeTab, setActiveTab] = useState("family");
+  const [familyQrCode, setFamilyQrCode] = useState<string>("");
+  const [childrenQrCodes, setChildrenQrCodes] = useState<
+    Record<string, string>
+  >({});
 
   // Mock data - in a real app, this would come from your database
   const familyData = {
@@ -30,10 +40,37 @@ export default function QrCodesPage() {
     window.print();
   };
 
-  const handleDownload = (qrId: string) => {
-    // In a real app, this would generate and download the QR code
-    alert(`Downloading QR code for ${qrId}`);
+  const handleDownload = async (qrId: string, qrCode: string) => {
+    const link = document.createElement("a");
+    link.download = `qr-code-${qrId}.png`;
+    link.href = qrCode;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
+
+  useEffect(() => {
+    const generateQrCodes = async () => {
+      try {
+        // Generate family QR code
+        const familyQrData = generateFamilyQRData(familyData.id);
+        const familyQr = await generateQRCode(familyQrData);
+        setFamilyQrCode(familyQr);
+
+        // Generate children QR codes
+        const childrenQrs: Record<string, string> = {};
+        for (const child of familyData.children) {
+          const childQrData = generateChildQRData(child.id, familyData.id);
+          childrenQrs[child.id] = await generateQRCode(childQrData);
+        }
+        setChildrenQrCodes(childrenQrs);
+      } catch (error) {
+        console.error("Error generating QR codes:", error);
+      }
+    };
+
+    generateQrCodes();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -69,12 +106,21 @@ export default function QrCodesPage() {
               </CardHeader>
               <CardContent className="flex flex-col items-center">
                 <div className="mb-6 rounded-lg border-4 border-primary/10 p-4">
-                  {/* This would be a real QR code in a production app */}
-                  <div className="flex h-64 w-64 items-center justify-center bg-muted">
-                    <div className="text-6xl font-bold text-muted-foreground/50">
-                      QR
+                  {familyQrCode ? (
+                    <Image
+                      src={familyQrCode}
+                      alt="Family QR Code"
+                      className="h-64 w-64"
+                      width={200}
+                      height={200}
+                    />
+                  ) : (
+                    <div className="flex h-64 w-64 items-center justify-center bg-muted">
+                      <div className="text-6xl font-bold text-muted-foreground/50">
+                        Loading...
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <p className="mt-2 text-center font-semibold">
                     {familyData.id}
                   </p>
@@ -86,7 +132,7 @@ export default function QrCodesPage() {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => handleDownload(familyData.id)}
+                    onClick={() => handleDownload(familyData.id, familyQrCode)}
                   >
                     <Download className="mr-2 h-4 w-4" /> Download
                   </Button>
@@ -118,12 +164,21 @@ export default function QrCodesPage() {
                   </CardHeader>
                   <CardContent className="flex flex-col items-center">
                     <div className="mb-6 rounded-lg border-4 border-primary/10 p-4">
-                      {/* This would be a real QR code in a production app */}
-                      <div className="flex h-48 w-48 items-center justify-center bg-muted">
-                        <div className="text-4xl font-bold text-muted-foreground/50">
-                          QR
+                      {childrenQrCodes[child.id] ? (
+                        <Image
+                          src={childrenQrCodes[child.id]}
+                          alt={`QR Code for ${child.name}`}
+                          className="h-48 w-48"
+                          width={200}
+                          height={200}
+                        />
+                      ) : (
+                        <div className="flex h-48 w-48 items-center justify-center bg-muted">
+                          <div className="text-4xl font-bold text-muted-foreground/50">
+                            Loading...
+                          </div>
                         </div>
-                      </div>
+                      )}
                       <p className="mt-2 text-center font-semibold">
                         {child.id}
                       </p>
@@ -136,7 +191,9 @@ export default function QrCodesPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => handleDownload(child.id)}
+                        onClick={() =>
+                          handleDownload(child.id, childrenQrCodes[child.id])
+                        }
                       >
                         <Download className="mr-2 h-4 w-4" /> Download
                       </Button>
