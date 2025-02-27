@@ -1,6 +1,7 @@
 import AuthProvider from "@/firebase/hooks/AuthProvider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 
 import "./globals.css";
 
@@ -30,7 +31,8 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
         >
-          <main className="container mx-auto max-w-screen-sm">{children}</main>
+          <main>{children}</main>
+          <Toaster />
         </body>
       </html>
     </AuthProvider>
