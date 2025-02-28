@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -158,19 +157,25 @@ export default function RegisterPage() {
       </Button>
 
       <Card className="mx-auto max-w-4xl">
-        <CardHeader>
-          <CardTitle>Register Your Family</CardTitle>
-          <CardDescription>
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-2xl">Register Your Family</CardTitle>
+          <CardDescription className="text-base">
             Create a family profile to check in and check out your children
             using our QR code system.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div>
-                <h3 className="text-lg font-medium">Parent Information</h3>
-                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+              {/* Parent Information Section */}
+              <div className="space-y-6">
+                <div className="border-b pb-2">
+                  <h3 className="text-lg font-semibold">Parent Information</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Primary parent or guardian details
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="parentFirstName"
@@ -229,8 +234,8 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                <div className="mt-8">
-                  <div className="mb-4 flex items-center space-x-2">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
                     <Checkbox
                       id="showSecondParent"
                       checked={showSecondParent}
@@ -246,18 +251,18 @@ export default function RegisterPage() {
                     />
                     <label
                       htmlFor="showSecondParent"
-                      className="text-sm font-medium leading-none"
+                      className="cursor-pointer text-sm font-medium leading-none"
                     >
-                      Include Second Parent
+                      Include Second Parent / Guardian
                     </label>
                   </div>
 
                   {showSecondParent && (
-                    <>
-                      <h4 className="text-md font-medium text-muted-foreground">
+                    <div className="space-y-4 rounded-lg border p-4">
+                      <h4 className="text-sm font-medium text-muted-foreground">
                         Second Parent Information
                       </h4>
-                      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <FormField
                           control={form.control}
                           name="parentTwoFirstName"
@@ -318,16 +323,20 @@ export default function RegisterPage() {
                           )}
                         />
                       </div>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <Separator />
-
-              <div>
-                <h3 className="text-lg font-medium">Emergency Contact</h3>
-                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              {/* Emergency Contact Section */}
+              <div className="space-y-6">
+                <div className="border-b pb-2">
+                  <h3 className="text-lg font-semibold">Emergency Contact</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Person to contact in case of emergency
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="emergencyContactName"
@@ -357,11 +366,17 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <Separator />
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Children Information</h3>
+              {/* Children Information Section */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between border-b pb-2">
+                  <div>
+                    <h3 className="text-lg font-semibold">
+                      Children Information
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Add your children&apos;s details
+                    </p>
+                  </div>
                   <Button
                     type="button"
                     onClick={addChild}
@@ -372,106 +387,110 @@ export default function RegisterPage() {
                   </Button>
                 </div>
 
-                {form.watch("children").map((child, index) => (
-                  <div key={index} className="mt-6 rounded-md border p-4">
-                    <div className="mb-4 flex items-center justify-between">
-                      <h4 className="font-medium">Child {index + 1}</h4>
-                      <Button
-                        type="button"
-                        onClick={() => removeChild(index)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                <div className="space-y-6">
+                  {form.watch("children").map((child, index) => (
+                    <div key={index} className="rounded-lg border p-6">
+                      <div className="mb-4 flex items-center justify-between">
+                        <h4 className="font-medium">Child {index + 1}</h4>
+                        <Button
+                          type="button"
+                          onClick={() => removeChild(index)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name={`children.${index}.firstName`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>First Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="First name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`children.${index}.lastName`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Last name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`children.${index}.dateOfBirth`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Date of Birth</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`children.${index}.allergies`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Allergies</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="List allergies (if any)"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Leave blank if none
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`children.${index}.specialNeeds`}
-                        render={({ field }) => (
-                          <FormItem className="md:col-span-2">
-                            <FormLabel>Special Needs or Instructions</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Any special needs or instructions"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Leave blank if none
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name={`children.${index}.firstName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>First Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="First name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`children.${index}.lastName`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Last name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`children.${index}.dateOfBirth`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Date of Birth</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`children.${index}.allergies`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Allergies</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="List allergies (if any)"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription>
+                                Leave blank if none
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`children.${index}.specialNeeds`}
+                          render={({ field }) => (
+                            <FormItem className="md:col-span-2">
+                              <FormLabel>
+                                Special Needs or Instructions
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Any special needs or instructions"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription>
+                                Leave blank if none
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
-              <CardFooter className="flex justify-end px-0">
-                <Button type="submit" disabled={isSubmitting}>
+              <CardFooter className="flex justify-end px-0 pt-6">
+                <Button type="submit" disabled={isSubmitting} size="lg">
                   {isSubmitting ? "Registering..." : "Register Family"}
                 </Button>
               </CardFooter>
