@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -44,6 +45,22 @@ const formSchema = z.object({
     .string()
     .min(2, "First name must be at least 2 characters"),
   parentLastName: z.string().min(2, "Last name must be at least 2 characters"),
+  parentTwoFirstName: z
+    .string()
+    .min(2, "First name must be at least 2 characters")
+    .optional(),
+  parentTwoLastName: z
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .optional(),
+  parentTwoEmail: z
+    .string()
+    .email("Please enter a valid email address")
+    .optional(),
+  parentTwoPhone: z
+    .string()
+    .min(10, "Please enter a valid phone number")
+    .optional(),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   emergencyContactName: z.string().min(2, "Emergency contact name is required"),
@@ -55,9 +72,12 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+// Add this near the top of the component, with other state declarations
+// Update the initial state to true
 export default function RegisterPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSecondParent, setShowSecondParent] = useState(true);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,6 +86,10 @@ export default function RegisterPage() {
       parentLastName: "",
       email: "",
       phone: "",
+      parentTwoFirstName: "",
+      parentTwoLastName: "",
+      parentTwoEmail: "",
+      parentTwoPhone: "",
       emergencyContactName: "",
       emergencyContactPhone: "",
       children: [
@@ -203,6 +227,99 @@ export default function RegisterPage() {
                       </FormItem>
                     )}
                   />
+                </div>
+
+                <div className="mt-8">
+                  <div className="mb-4 flex items-center space-x-2">
+                    <Checkbox
+                      id="showSecondParent"
+                      checked={showSecondParent}
+                      onCheckedChange={(checked) => {
+                        setShowSecondParent(checked as boolean);
+                        if (!checked) {
+                          form.setValue("parentTwoFirstName", "");
+                          form.setValue("parentTwoLastName", "");
+                          form.setValue("parentTwoEmail", "");
+                          form.setValue("parentTwoPhone", "");
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="showSecondParent"
+                      className="text-sm font-medium leading-none"
+                    >
+                      Include Second Parent
+                    </label>
+                  </div>
+
+                  {showSecondParent && (
+                    <>
+                      <h4 className="text-md font-medium text-muted-foreground">
+                        Second Parent Information
+                      </h4>
+                      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="parentTwoFirstName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>First Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="John" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="parentTwoLastName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Doe" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="parentTwoEmail"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="email"
+                                  placeholder="john.doe@example.com"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="parentTwoPhone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Phone Number</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="(555) 123-4567"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
