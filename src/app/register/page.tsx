@@ -53,19 +53,23 @@ const formSchema = z.object({
   parentTwoFirstName: z
     .string()
     .min(2, "First name must be at least 2 characters")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   parentTwoLastName: z
     .string()
     .min(2, "Last name must be at least 2 characters")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   parentTwoEmail: z
     .string()
     .email("Please enter a valid email address")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   parentTwoPhone: z
     .string()
     .min(10, "Please enter a valid phone number")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   phone: z.string().min(10, "Please enter a valid phone number"),
@@ -116,11 +120,20 @@ export default function RegisterPage() {
     setIsSubmitting(true);
 
     try {
+      // If second parent is not shown, ensure we don't validate those fields
+      if (!showSecondParent) {
+        // Make sure these fields are empty strings to avoid validation errors
+        data.parentTwoFirstName = "";
+        data.parentTwoLastName = "";
+        data.parentTwoEmail = "";
+        data.parentTwoPhone = "";
+      }
+
       // Create the user account in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         data.email,
-        data.password, // Use the password from the form
+        data.password,
       );
 
       const user = userCredential.user;
