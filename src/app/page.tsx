@@ -39,12 +39,12 @@ export default function Home() {
                   <div className="flex gap-4">
                     <Button asChild>
                       <Link href="/check-in">
-                        Check In <ChevronRight className="ml-2 h-4 w-4" />
+                        Check In <ChevronRight className="ml-2 size-4" />
                       </Link>
                     </Button>
                     <Button asChild variant="outline">
                       <Link href="/check-out">
-                        Check Out <ChevronRight className="ml-2 h-4 w-4" />
+                        Check Out <ChevronRight className="ml-2 size-4" />
                       </Link>
                     </Button>
                   </div>
@@ -61,7 +61,7 @@ export default function Home() {
                 <CardContent>
                   <Button asChild className="w-full">
                     <Link href="/dashboard/qrcodes">
-                      Go to Dashboard <ChevronRight className="ml-2 h-4 w-4" />
+                      Go to Dashboard <ChevronRight className="ml-2 size-4" />
                     </Link>
                   </Button>
                 </CardContent>
@@ -79,7 +79,7 @@ export default function Home() {
                 <CardContent>
                   <Button asChild className="w-full">
                     <Link href="/login">
-                      Sign In <ChevronRight className="ml-2 h-4 w-4" />
+                      Sign In <ChevronRight className="ml-2 size-4" />
                     </Link>
                   </Button>
                 </CardContent>
@@ -96,7 +96,7 @@ export default function Home() {
                   <Button asChild className="w-full">
                     <Link href="/register">
                       Register Your Family{" "}
-                      <ChevronRight className="ml-2 h-4 w-4" />
+                      <ChevronRight className="ml-2 size-4" />
                     </Link>
                   </Button>
                 </CardContent>

@@ -49,7 +49,7 @@ export default function FamilyPage() {
     <div className="container mx-auto px-4 py-12">
       <Button asChild variant="ghost" className="mb-6">
         <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 size-4" /> Back to Home
         </Link>
       </Button>
 
@@ -66,7 +66,7 @@ export default function FamilyPage() {
                 </CardDescription>
               </div>
               <Button variant="outline" size="sm">
-                <Pencil className="mr-2 h-4 w-4" /> Edit
+                <Pencil className="mr-2 size-4" /> Edit
               </Button>
             </div>
           </CardHeader>
@@ -106,7 +106,7 @@ export default function FamilyPage() {
                 </CardDescription>
               </div>
               <Button variant="outline" size="sm">
-                <Pencil className="mr-2 h-4 w-4" /> Edit
+                <Pencil className="mr-2 size-4" /> Edit
               </Button>
             </div>
           </CardHeader>
@@ -138,7 +138,7 @@ export default function FamilyPage() {
                 </CardDescription>
               </div>
               <Button variant="outline" size="sm">
-                <Pencil className="mr-2 h-4 w-4" /> Edit
+                <Pencil className="mr-2 size-4" /> Edit
               </Button>
             </div>
           </CardHeader>

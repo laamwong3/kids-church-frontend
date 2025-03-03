@@ -70,13 +70,13 @@ export default function AttendancePage() {
     <div className="container mx-auto px-4 py-12">
       <Button asChild variant="ghost" className="mb-6">
         <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 size-4" /> Back to Home
         </Link>
       </Button>
 
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex items-center gap-4">
-          <Calendar className="h-8 w-8 text-primary" />
+          <Calendar className="size-8 text-primary" />
           <div>
             <h1 className="text-3xl font-bold">Attendance History</h1>
             <p className="text-muted-foreground">

@@ -76,7 +76,7 @@ export default function QrCodesPage() {
     <div className="container mx-auto px-4 py-12">
       <Button asChild variant="ghost" className="mb-6">
         <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 size-4" /> Back to Home
         </Link>
       </Button>
 
@@ -110,12 +110,12 @@ export default function QrCodesPage() {
                     <Image
                       src={familyQrCode}
                       alt="Family QR Code"
-                      className="h-64 w-64"
+                      className="size-64"
                       width={200}
                       height={200}
                     />
                   ) : (
-                    <div className="flex h-64 w-64 items-center justify-center bg-muted">
+                    <div className="flex size-64 items-center justify-center bg-muted">
                       <div className="text-6xl font-bold text-muted-foreground/50">
                         Loading...
                       </div>
@@ -128,13 +128,13 @@ export default function QrCodesPage() {
 
                 <div className="flex gap-4">
                   <Button onClick={handlePrint}>
-                    <Printer className="mr-2 h-4 w-4" /> Print QR Code
+                    <Printer className="mr-2 size-4" /> Print QR Code
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => handleDownload(familyData.id, familyQrCode)}
                   >
-                    <Download className="mr-2 h-4 w-4" /> Download
+                    <Download className="mr-2 size-4" /> Download
                   </Button>
                 </div>
 
@@ -168,12 +168,12 @@ export default function QrCodesPage() {
                         <Image
                           src={childrenQrCodes[child.id]}
                           alt={`QR Code for ${child.name}`}
-                          className="h-48 w-48"
+                          className="size-48"
                           width={200}
                           height={200}
                         />
                       ) : (
-                        <div className="flex h-48 w-48 items-center justify-center bg-muted">
+                        <div className="flex size-48 items-center justify-center bg-muted">
                           <div className="text-4xl font-bold text-muted-foreground/50">
                             Loading...
                           </div>
@@ -186,7 +186,7 @@ export default function QrCodesPage() {
 
                     <div className="flex gap-2">
                       <Button size="sm" onClick={handlePrint}>
-                        <Printer className="mr-2 h-4 w-4" /> Print
+                        <Printer className="mr-2 size-4" /> Print
                       </Button>
                       <Button
                         size="sm"
@@ -195,7 +195,7 @@ export default function QrCodesPage() {
                           handleDownload(child.id, childrenQrCodes[child.id])
                         }
                       >
-                        <Download className="mr-2 h-4 w-4" /> Download
+                        <Download className="mr-2 size-4" /> Download
                       </Button>
                     </div>
                   </CardContent>

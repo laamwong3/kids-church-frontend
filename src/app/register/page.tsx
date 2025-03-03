@@ -152,7 +152,7 @@ export default function RegisterPage() {
     <div className="container mx-auto px-4 py-12">
       <Button asChild variant="ghost" className="mb-6">
         <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 size-4" /> Back to Home
         </Link>
       </Button>
 
@@ -383,7 +383,7 @@ export default function RegisterPage() {
                     variant="outline"
                     size="sm"
                   >
-                    <Plus className="mr-2 h-4 w-4" /> Add Child
+                    <Plus className="mr-2 size-4" /> Add Child
                   </Button>
                 </div>
 
@@ -399,7 +399,7 @@ export default function RegisterPage() {
                           size="sm"
                           className="text-destructive"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="size-4" />
                         </Button>
                       </div>
 

@@ -31,9 +31,9 @@ export function QrScanner({ onScan }: QrScannerProps) {
       <div className="flex flex-col items-center justify-center space-y-4">
         {isLoading ? (
           <>
-            <div className="flex h-64 w-64 items-center justify-center bg-muted">
+            <div className="flex size-64 items-center justify-center bg-muted">
               <div className="flex animate-pulse flex-col items-center">
-                <div className="h-16 w-16 rounded-full bg-muted-foreground/20"></div>
+                <div className="size-16 rounded-full bg-muted-foreground/20"></div>
                 <div className="mt-4 text-sm text-muted-foreground">
                   Accessing camera...
                 </div>
@@ -56,7 +56,7 @@ export function QrScanner({ onScan }: QrScannerProps) {
           </div>
         ) : (
           <div className="text-center">
-            <div className="flex h-64 w-64 items-center justify-center bg-muted">
+            <div className="flex size-64 items-center justify-center bg-muted">
               <div className="animate-pulse">
                 <p className="text-muted-foreground">Scanning...</p>
               </div>

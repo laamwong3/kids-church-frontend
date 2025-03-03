@@ -53,7 +53,7 @@ export default function CheckInPage() {
     <div className="container mx-auto px-4 py-12">
       <Button asChild variant="ghost" className="mb-6">
         <Link href="/">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 size-4" /> Back to Home
         </Link>
       </Button>
 
@@ -86,7 +86,7 @@ export default function CheckInPage() {
                     className="w-full"
                     onClick={() => setShowScanner(true)}
                   >
-                    <QrCode className="mr-2 h-4 w-4" /> Scan QR Code
+                    <QrCode className="mr-2 size-4" /> Scan QR Code
                   </Button>
 
                   <div className="relative">
@@ -111,7 +111,7 @@ export default function CheckInPage() {
                       />
                     </div>
                     <Button type="submit" className="w-full">
-                      <Search className="mr-2 h-4 w-4" /> Search
+                      <Search className="mr-2 size-4" /> Search
                     </Button>
                   </form>
                 </div>
@@ -121,9 +121,9 @@ export default function CheckInPage() {
             <div className="space-y-4">
               <div className="rounded-md border border-green-200 bg-green-50 p-4">
                 <div className="flex">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <svg
-                      className="h-5 w-5 text-green-400"
+                      className="size-5 text-green-400"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
