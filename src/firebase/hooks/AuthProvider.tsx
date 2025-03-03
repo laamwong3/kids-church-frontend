@@ -1,31 +1,41 @@
+// src/firebase/hooks/AuthProvider.tsx
 "use client";
 
 import { auth } from "@/firebase/firebase";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
+// src/firebase/hooks/AuthProvider.tsx
+
+// src/firebase/hooks/AuthProvider.tsx
+
 type AuthContextType = {
   user: User | null;
+  loading: boolean;
 };
 
-const AuthContext = createContext<AuthContextType>({ user: null });
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+});
 
-// Higher order component to provide authentication context
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // Updates the user state when the user logs in or out
       setUser(user || null);
+      setLoading(false);
     });
 
-    // cleanup
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 

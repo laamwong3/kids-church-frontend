@@ -20,7 +20,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { auth, db } from "@/firebase/firebase";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -61,6 +67,7 @@ const formSchema = z.object({
     .min(10, "Please enter a valid phone number")
     .optional(),
   email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   phone: z.string().min(10, "Please enter a valid phone number"),
   emergencyContactName: z.string().min(2, "Emergency contact name is required"),
   emergencyContactPhone: z
@@ -84,6 +91,7 @@ export default function RegisterPage() {
       parentFirstName: "",
       parentLastName: "",
       email: "",
+      password: "",
       phone: "",
       parentTwoFirstName: "",
       parentTwoLastName: "",
@@ -103,21 +111,73 @@ export default function RegisterPage() {
     },
   });
 
-  function onSubmit(data: FormValues) {
+  // Add this to your onSubmit function in src/app/register/page.tsx
+  async function onSubmit(data: FormValues) {
     setIsSubmitting(true);
 
-    // In a real application, you would send this data to your backend
-    console.log(data);
+    try {
+      // Create the user account in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password, // Use the password from the form
+      );
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast("Registration successful!", {
-        description:
-          "Your family has been registered. You can now check in your children.",
+      const user = userCredential.user;
+
+      // Send email verification
+      await sendEmailVerification(user);
+
+      // Store family data in Firestore
+      const familyRef = doc(db, "families", user.uid);
+      await setDoc(familyRef, {
+        parentFirstName: data.parentFirstName,
+        parentLastName: data.parentLastName,
+        email: data.email,
+        phone: data.phone,
+        parentTwo: showSecondParent
+          ? {
+              firstName: data.parentTwoFirstName,
+              lastName: data.parentTwoLastName,
+              email: data.parentTwoEmail,
+              phone: data.parentTwoPhone,
+            }
+          : null,
+        emergencyContact: {
+          name: data.emergencyContactName,
+          phone: data.emergencyContactPhone,
+        },
+        createdAt: serverTimestamp(),
       });
-      router.push("/dashboard/qrcodes");
-    }, 1500);
+
+      // Store children data
+      data.children.forEach(async (child) => {
+        const childRef = doc(collection(db, "children"));
+        await setDoc(childRef, {
+          familyId: user.uid,
+          firstName: child.firstName,
+          lastName: child.lastName,
+          dateOfBirth: child.dateOfBirth,
+          allergies: child.allergies || "None",
+          specialNeeds: child.specialNeeds || "None",
+          createdAt: serverTimestamp(),
+        });
+      });
+
+      toast("Registration successful!", {
+        description: "Please check your email to verify your account.",
+      });
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Error registering family:", error);
+      toast.error("Registration failed", {
+        description:
+          error instanceof Error ? error.message : "Unknown error occurred.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const addChild = () => {
@@ -212,6 +272,23 @@ export default function RegisterPage() {
                           <Input
                             type="email"
                             placeholder="john.doe@example.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Choose a password"
                             {...field}
                           />
                         </FormControl>
